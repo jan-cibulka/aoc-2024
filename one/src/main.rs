@@ -11,7 +11,6 @@ fn main() {
     let mut list2: Vec<i32> = Vec::new();
 
     for line in contents.lines().into_iter().filter(|line| !line.is_empty()) {
-        println!("{}", line);
         let mut parts = line.split_whitespace();
 
         let value1 = parts.next();
@@ -19,7 +18,6 @@ fn main() {
 
         match (value1, value2) {
             (Some(v1), Some(v2)) => {
-                println!("Value 1: {}, Value 2: {}", v1, v2);
                 match v1.parse::<i32>() {
                     Ok(parsed_value1) => list1.push(parsed_value1),
                     Err(_) => println!("Failed to parse value 1."),
@@ -35,21 +33,33 @@ fn main() {
             }
         }
     }
-
     list1.sort();
     list2.sort();
 
-    let mut acc = 0;
-
+    // Part 1
+    let mut acc: i32 = 0;
     for x in 0..list1.len() {
-        println!("x: {}", x);
         let a: i32 = list1[x];
         let b: i32 = list2[x];
         let distance = (a - b).abs();
-        println!("number {} {}, dist {}", a, b, distance);
 
         acc += distance;
     }
+    println!("part 1 answer : {}", acc);
 
-    println!("{}", acc)
+    // Part 2
+    let mut acc2: i32 = 0;
+    for x in 0..list1.len() {
+        let val_x = list1[x];
+        let mut count: i32 = 0;
+        for y in 0..list2.len() {
+            let val_y = list2[y];
+            if val_x == val_y {
+                count += 1;
+            }
+        }
+        acc2 += (val_x as i32) * count;
+    }
+
+    println!("part 2 answer : {}", acc2)
 }
