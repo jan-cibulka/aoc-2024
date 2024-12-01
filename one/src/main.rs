@@ -1,40 +1,42 @@
-use std::{fs::File, io::Read};
+use std::{
+    fs::File,
+    io::{self, Read},
+};
 
-fn main() {
-    let mut file = File::open("input.txt").expect("Can't open file!");
+fn read_file_contents(filename: &str) -> io::Result<String> {
+    let mut file = File::open(filename)?;
     let mut contents = String::new();
+    file.read_to_string(&mut contents)?;
+    Ok(contents)
+}
 
-    file.read_to_string(&mut contents)
-        .expect("Unable to read to line.");
+fn parse_line(line: &str) -> Option<(i32, i32)> {
+    let mut parts = line.split_whitespace();
+    let value1 = parts.next()?.parse::<i32>().ok()?;
+    let value2 = parts.next()?.parse::<i32>().ok()?;
+    Some((value1, value2))
+}
 
+fn create_lists(contents: String) -> (Vec<i32>, Vec<i32>) {
     let mut list1: Vec<i32> = Vec::new();
     let mut list2: Vec<i32> = Vec::new();
 
-    for line in contents.lines().into_iter().filter(|line| !line.is_empty()) {
-        let mut parts = line.split_whitespace();
-
-        let value1 = parts.next();
-        let value2 = parts.next();
-
-        match (value1, value2) {
-            (Some(v1), Some(v2)) => {
-                match v1.parse::<i32>() {
-                    Ok(parsed_value1) => list1.push(parsed_value1),
-                    Err(_) => println!("Failed to parse value 1."),
-                }
-
-                match v2.parse::<i32>() {
-                    Ok(parsed_value2) => list2.push(parsed_value2),
-                    Err(_) => println!("Failed to parse value 1."),
-                }
-            }
-            _ => {
-                println!("Failed to split the string correctly.");
-            }
+    for line in contents.lines().filter(|line| !line.is_empty()) {
+        if let Some((v1, v2)) = parse_line(line) {
+            list1.push(v1);
+            list2.push(v2);
         }
     }
+
     list1.sort();
     list2.sort();
+
+    (list1, list2)
+}
+
+fn main() -> io::Result<()> {
+    let contents = read_file_contents("input.txt")?;
+    let (list1, list2) = create_lists(contents);
 
     // Part 1
     let mut acc: i32 = 0;
@@ -42,24 +44,22 @@ fn main() {
         let a: i32 = list1[x];
         let b: i32 = list2[x];
         let distance = (a - b).abs();
-
         acc += distance;
     }
     println!("part 1 answer : {}", acc);
 
     // Part 2
     let mut acc2: i32 = 0;
-    for x in 0..list1.len() {
-        let val_x = list1[x];
+    for &val_x in &list1 {
         let mut count: i32 = 0;
-        for y in 0..list2.len() {
-            let val_y = list2[y];
+        for &val_y in &list2 {
             if val_x == val_y {
                 count += 1;
             }
         }
-        acc2 += (val_x as i32) * count;
+        acc2 += val_x * count;
     }
 
-    println!("part 2 answer : {}", acc2)
+    println!("part 2 answer : {}", acc2);
+    Ok(())
 }
