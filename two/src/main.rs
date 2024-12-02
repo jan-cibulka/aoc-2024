@@ -12,21 +12,15 @@ fn read_file_contents(filename: &str) -> io::Result<String> {
 
 fn parse_line(line: &str) -> Option<(i32, i32)> {
     let mut parts = line.split_whitespace();
-    let value1 = 0
-    let value2 = 0
+    let value1 = 0;
+    let value2 = 0;
     Some((value1, value2))
 }
 
-
 fn main() -> io::Result<()> {
     let contents = read_file_contents("input.txt")?;
-   
 
     // Part 1: Use iterators
-    
-    
 
-    
-    
     Ok(())
 }
