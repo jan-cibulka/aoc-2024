@@ -38,14 +38,12 @@ fn main() -> io::Result<()> {
     let contents = read_file_contents("input.txt")?;
     let (list1, list2) = create_lists(contents);
 
-    // Part 1
-    let mut acc: i32 = 0;
-    for x in 0..list1.len() {
-        let a: i32 = list1[x];
-        let b: i32 = list2[x];
-        let distance = (a - b).abs();
-        acc += distance;
-    }
+    // Part 1: Use iterators
+    let acc: i32 = list1
+        .iter()
+        .zip(list2.iter())
+        .map(|(a, b)| (a - b).abs())
+        .sum();
     println!("part 1 answer : {}", acc);
 
     // Part 2
