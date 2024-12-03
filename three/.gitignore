@@ -1,0 +1,25 @@
+# Compiled output
+/target/
+
+# Rust/Cargo specific
+**/*.rs.bk
+**/*.rs.old
+/.cargo/
+/Cargo.lock
+
+# If you're using crates.io registry, you might have these cache files
+.cargo/
+
+# IDE/Editor specific files
+# VS Code
+/.vscode/
+/.vscode/
+/.idea/
+
+# MacOS specific files
+.DS_Store
+
+# Other files
+*.log
+*.tmp
+*.swp
