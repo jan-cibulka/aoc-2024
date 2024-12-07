@@ -64,4 +64,24 @@ const main = () => {
 
 
 
-main();
+const main2 = () => {
+  const content = readFileContent(EXAMPLE_FILE_NAME);
+  const lines = content.split("\n");
+  const { rules, updates } = parseRulesAndUpdates(lines);
+
+  const invalidUpdates = updates.filter((update) => {
+
+
+    const updateRules = getRulesPerUpdate(update, rules);
+     return !getIsUpdateValid(update, updateRules);
+    })
+   
+   
+
+
+  console.log(invalidUpdates)
+};
+
+
+
+main2();
