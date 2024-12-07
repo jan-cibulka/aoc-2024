@@ -40,7 +40,11 @@ const getRulesPerUpdate = (update: Update, rules: Rule[]): Rule[] =>
 
 const getIsUpdateValid = (update: Update, rules: Rule[]): boolean =>
   rules.every((rule) => {
-    return update.indexOf(rule.r1) < update.indexOf(rule.r2);
+    return (
+      update.indexOf(rule.r1) === -1 ||
+      update.indexOf(rule.r2) === -1 ||
+      update.indexOf(rule.r1) < update.indexOf(rule.r2)
+    );
   });
 
 const main = () => {
@@ -53,12 +57,11 @@ const main = () => {
     const middleRuleValue = update.at(update.length / 2) || 0;
     const updateRules = getRulesPerUpdate(update, rules);
     const isUpdateValid = getIsUpdateValid(update, updateRules);
-    console.log(i, " : ", isUpdateValid);
 
     acc += isUpdateValid ? middleRuleValue : 0;
   });
 
-  console.log(acc);
+  console.log("Part 1 : ", acc);
 };
 
 const sanitizeUpdate = (invalidUpdate: Update, rules: Rule[]): Update => {
@@ -67,7 +70,8 @@ const sanitizeUpdate = (invalidUpdate: Update, rules: Rule[]): Update => {
   invalidUpdate.forEach((number) => {
     let index = 0;
     while (index <= newUpdate.length) {
-      const candidateUpdate = [...newUpdate].splice(index, 0, number);
+      const candidateUpdate = [...newUpdate];
+      candidateUpdate.splice(index, 0, number);
       const isUpdateValid = getIsUpdateValid(candidateUpdate, updateRules);
       if (isUpdateValid) {
         newUpdate = candidateUpdate;
@@ -91,9 +95,14 @@ const main2 = () => {
     return !getIsUpdateValid(update, updateRules);
   });
 
-  const sanitizedUpdates = sanitizeUpdate(invalidUpdates[0], rules);
+  let acc = 0;
+  invalidUpdates.forEach((invalidUpdate) => {
+    const sanitizedUpdate = sanitizeUpdate(invalidUpdate, rules);
+    const middleRuleValue = sanitizedUpdate.at(sanitizedUpdate.length / 2) || 0;
+    acc += middleRuleValue;
+  });
 
-  console.log(sanitizedUpdates);
-};
-
+  console.log("Part 2 : ", acc);
+}
+main();
 main2();
