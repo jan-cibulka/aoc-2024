@@ -1,7 +1,7 @@
+use std::str::SplitWhitespace;
 use std::{
     fs::File,
     io::{self, Read},
-    str::SplitWhitespace,
 };
 
 use regex::Regex;
