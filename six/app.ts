@@ -207,8 +207,6 @@ const step = (
     guardPosition,
     guardDirection
   );
-  printOutState(newState);
-
   return {
     state: newState,
     guardDirection: newDirection,
